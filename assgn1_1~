@@ -1,0 +1,11 @@
+pig1 = LOAD '/home/acadgild/Downloads/Consumer_Complaints.csv' using PigStorage(',') as (dateR:chararray, product:chararray, subProduct:chararray, issue:chararray, subIssue:chararray, complain:chararray, company:chararray, state:chararray, zip:chararray, viaChannel:chararray, dateToCompany:chararray, companyResp:chararray, timelyResp:chararray, disputedConsumer:chararray, complainID:chararray);
+
+pig2 = filter pig1 by (timelyResp == 'Closed without relief');
+
+pig3 = GROUP pig2 ALL;
+
+pig4 = foreach pig3 generate COUNT(pig2);
+
+STORE pig4 INTO 'output1';
+
+

@@ -1,0 +1,18 @@
+pig1 = LOAD 'hdfs://localhost:9000/user/acadgild/share/Consumer_Complain' using PigStorage(',') as (dateR:chararray, product:chararray, subProduct:chararray, issue:chararray, subIssue:chararray, complain:chararray, detail:chararray, company:chararray, state:chararray, zip:chararray, viaChannel:chararray, dateToCompany:chararray, companyResp:chararray, timelyResp:chararray, disputedConsumer:chararray, complainID:chararray);
+
+pig2 = foreach pig1 generate ToDate(dateR, 'MM/dd/yyyy') AS date, product;
+
+pig3 = filter pig2 by GetYear(date) == 2015;
+
+pig4 = filter pig3 by (product == 'Debt collection');
+
+dump pig4;
+
+pig5 = GROUP pig4 ALL;
+
+pig6 = foreach pig5 generate COUNT(pig4);
+
+STORE pig6 INTO 'output4';
+
+
+

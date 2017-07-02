@@ -1,0 +1,12 @@
+pig1 = LOAD 'hdfs://localhost:9000/user/acadgild/share/Consumer_Complain' using PigStorage(',') as (dateR:chararray, product:chararray, subProduct:chararray, issue:chararray, subIssue:chararray, complain:chararray, detail:chararray, company:chararray, state:chararray, zip:chararray, viaChannel:chararray, dateToCompany:chararray, companyResp:chararray, timelyResp:chararray, disputedConsumer:chararray, complainID:chararray);
+
+pig2 = group pig1 by $7;
+
+pig3 = foreach pig2 generate group AS company, COUNT(pig1.company) AS total_count;
+
+pig4 =  ORDER pig3 by total_count;
+
+STORE pig4 into 'output3';
+
+
+
